@@ -101,11 +101,11 @@ long LinuxParser::UpTime() {
     }
   }
   long val;
-  try {
+  //try {
     val = stol(value);
-  } catch (std::invalid_argument) {
-    std::cout << "error with value";
-  }
+  //} catch (std::invalid_argument) {
+  //  std::cout << "error with value";
+  //}
   //trace before return
  
   return val;
