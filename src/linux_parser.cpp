@@ -101,49 +101,49 @@ long LinuxParser::UpTime() {
     }
   }
   long val;
-  //try {
-    val = stol(value);
+  // try {
+  val = stol(value);
   //} catch (std::invalid_argument) {
   //  std::cout << "error with value";
   //}
-  //trace before return
- 
+  // trace before return
+
   return val;
 }
-  vector<std::string> LinuxParser::ProcessorAttributes(){
-    string key, line, usertime, guest, nicetime, guestnice, idletime, ioWait, systemtime, irq, softIrq, steal; 
-    vector<string> attr{};
+vector<std::string> LinuxParser::ProcessorAttributes() {
+  string key, line, usertime, guest, nicetime, guestnice, idletime, ioWait,
+      systemtime, irq, softIrq, steal;
+  vector<string> attr{};
   std::ifstream fileStream{kProcDirectory + kStatFilename};
   if (fileStream.is_open()) {
     std::getline(fileStream, line);
-      std::istringstream stream{line};
-      stream >> key;
-      
-      stream >> usertime;
-      attr.push_back(usertime);
-      stream >> nicetime;
-      attr.push_back(nicetime);
-      stream >> systemtime;
-      attr.push_back(systemtime);
-      stream >> idletime;
-      attr.push_back(idletime);
-      stream >> ioWait;
-      attr.push_back(ioWait);
-      stream >> irq;
-      attr.push_back(irq);
-      stream >> softIrq;
-      attr.push_back(softIrq);
-      stream >> steal;
-      attr.push_back(steal);
-      stream >> guest;
-      attr.push_back(guest);
-      stream >> guestnice;
-      attr.push_back(guestnice);
+    std::istringstream stream{line};
+    stream >> key;
+
+    stream >> usertime;
+    attr.push_back(usertime);
+    stream >> nicetime;
+    attr.push_back(nicetime);
+    stream >> systemtime;
+    attr.push_back(systemtime);
+    stream >> idletime;
+    attr.push_back(idletime);
+    stream >> ioWait;
+    attr.push_back(ioWait);
+    stream >> irq;
+    attr.push_back(irq);
+    stream >> softIrq;
+    attr.push_back(softIrq);
+    stream >> steal;
+    attr.push_back(steal);
+    stream >> guest;
+    attr.push_back(guest);
+    stream >> guestnice;
+    attr.push_back(guestnice);
   }
   return attr;
-  }
+}
 // TODO: Read and return CPU utilization
-
 
 vector<int> LinuxParser::processTime(int pid) {
   string key, value, line;
@@ -171,8 +171,8 @@ vector<int> LinuxParser::processTime(int pid) {
 }
 float LinuxParser::processCpuUtilization(int pid) {
   vector<int> pTimes = processTime(pid);
-  float total_time =
-      float((pTimes[0] + pTimes[1] + pTimes[2] + pTimes[3])) / sysconf(_SC_CLK_TCK);
+  float total_time = float((pTimes[0] + pTimes[1] + pTimes[2] + pTimes[3])) /
+                     sysconf(_SC_CLK_TCK);
   float total_elapsed =
       LinuxParser::UpTime() - (pTimes[4] / sysconf(_SC_CLK_TCK));
   float util = (total_time / total_elapsed);
@@ -244,7 +244,14 @@ string LinuxParser::Ram(int pid [[maybe_unused]]) {
       }
     }
   }
-  int r = stoi(ram)/1000;
+  int r = 0;
+  try {
+   if(ram != "")
+    r = stoi(ram) / 1000;
+  } catch (std::invalid_argument& s) {
+    std::cout << "wrong input"
+              << "\n";
+  }
   return std::to_string(r);
 }
 

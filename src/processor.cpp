@@ -5,8 +5,8 @@
 
 std::vector<int> ConvertProcessorAttr(std::vector<std::string> &attr) {
   std::vector<int> list {};
-  for (std::string attr : attr) {
-    list.push_back(stoi(attr));
+  for (std::string attributes : attr) {
+    list.push_back(stoi(attributes));
   }
   return list;
 }
